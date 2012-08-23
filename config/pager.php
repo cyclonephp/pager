@@ -1,8 +1,7 @@
 <?php
 
 return array(
-  'show_first_link' => TRUE,
-  'show_first_link' => TRUE,
-  'show_first_link' => TRUE,
-  'show_first_link' => TRUE,
+    'auto_hide' => TRUE,
+    'template' => 'pager/pager',
+    'link_count' => 11
 );
