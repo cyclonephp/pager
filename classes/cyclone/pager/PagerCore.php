@@ -172,7 +172,11 @@ class PagerCore {
      * @return string
      */
     public function render() {
-        return $this->get_view()->render();
+        $view = $this->get_view();
+        if ($view === NULL) 
+            return '';
+
+        return $view->render();
     }
 
 }

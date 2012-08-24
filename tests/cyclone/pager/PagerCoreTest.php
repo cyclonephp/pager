@@ -8,7 +8,7 @@ class PagerCoreTest extends \Kohana_Unittest_TestCase {
 
     public static function create_pager($page, $pagesize, $total_count) {
         $pager = new PagerCore(new MockParamSource($page, $pagesize), new MockURLProvider());
-        return $pager->total_count($total_count);
+        return $pager->total_count($total_count)->auto_hide(FALSE);
     }
 
     public function test_page_count() {
@@ -213,4 +213,11 @@ class PagerCoreTest extends \Kohana_Unittest_TestCase {
         $pager = new PagerCore(new MockParamSource(10, 20), new MockURLProvider());
         $pager->get_view();
     }
+
+    public function test_auto_hide() {
+        $pager = self::create_pager(1, 10, 5)->auto_hide(TRUE);
+        $this->assertEquals(NULL, $pager->get_view());
+        $this->assertEquals('', $pager->render());
+    }
+
 }
