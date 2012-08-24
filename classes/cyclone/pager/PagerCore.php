@@ -139,11 +139,16 @@ class PagerCore {
      */
     public function get_view() {
         if (NULL === $this->_total_count)
-            throw new PagerException("total_count must be set before rendering");
+            throw new Exception("total_count must be set before rendering");
 
         $current_page = $this->_param_source->get_page();
+        if ($current_page < 1)
+            throw new Exception("invalid value returned by ParamSource::get_page(): '$current_page'");
         $page_size = $this->_param_source->get_pagesize();
         $page_count = (int) ceil($this->_total_count / $page_size);
+
+        if ($current_page > $page_count)
+            throw new Exception("invalid state: current_page = '$current_page' > page_count = '$page_count'");
 
         $first_item_offset = ($current_page - 1) * $page_size + 1;
         $last_item_offset = min($current_page * $page_size, $this->_total_count);

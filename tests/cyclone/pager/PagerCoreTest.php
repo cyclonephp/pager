@@ -191,4 +191,26 @@ class PagerCoreTest extends \Kohana_Unittest_TestCase {
         }
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * @expectedException \cyclone\pager\Exception
+     */
+    public function test_exc_on_invalid_page() {
+        self::create_pager(0, 10, 20)->get_view();
+    }
+
+    /**
+     * @expectedException \cyclone\pager\Exception
+     */
+    public function test_exc_on_high_curr_page() {
+        self::create_pager(10, 10, 20)->get_view();
+    }
+
+    /**
+     * @expectedException \cyclone\pager\Exception
+     */
+    public function test_exc_on_undefined_total() {
+        $pager = new PagerCore(new MockParamSource(10, 20), new MockURLProvider());
+        $pager->get_view();
+    }
 }
