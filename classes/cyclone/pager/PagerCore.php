@@ -144,6 +144,11 @@ class PagerCore {
         $current_page = $this->_param_source->get_page();
         if ($current_page < 1)
             throw new Exception("invalid value returned by ParamSource::get_page(): '$current_page'");
+
+        if ($this->_auto_hide && $current_page === 1) {
+            return NULL;
+        }
+
         $page_size = $this->_param_source->get_pagesize();
         $page_count = (int) ceil($this->_total_count / $page_size);
 
