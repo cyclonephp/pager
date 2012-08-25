@@ -3,5 +3,6 @@
 return array(
     'auto_hide' => TRUE,
     'template' => 'pager/pager',
-    'link_count' => 11
+    'link_count' => 11,
+    'request' => array()
 );
