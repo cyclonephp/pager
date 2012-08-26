@@ -1,0 +1,118 @@
+@section pager-intro Pager - introduction
+
+<p>Displaying collections on the user interface in a paginated way is an everyday task of
+web developers. These collections can be data tables or forum posts, whatever, but in most
+cases they should be rendered in fixed-size fragments (pages) to avoid unwanted memory consumption
+and network overhead, and to achieve better user experience. Such paginated lists need a pager
+component which let the user to navigate between pages. Such pagers are not hard to implement but
+a bit more complex than "trivial", therefore it makes sense to separate the pagination logic into
+a separate software component - thats what the pager library provides.</p>
+
+<p>
+Just to make clear what we are talking about let's see an example:<br/>
+@img img/pager.png <br/>
+<em>An ordinary pager on a website</em>
+</p>
+
+@section pager-helloworld The hello-world example
+
+<p>The pager library comes with an in-built helloworld example, you can install it using the<br/>
+<code>./cyphp system install-example -e pager/hello -d app</code><br/>
+command. Let's look at the example controller:
+@code
+namespace app\controller;
+
+use cyclone\request\BaseController;
+use cyclone\pager\Pager;
+use cyclone\DB;
+
+class PagerController extends BaseController {
+
+    public function action_index() {
+        // adding some CSS to the output - this example CSS file is contained by the pager library
+        $this->add_css('pager/examples/skeleton');
+        // creating a pager instance for pages containing 10 items
+        // the actual page number will be extracted from the 'page' key of the query string
+        // ( for example http://localhost/cyclonephp/pager/?page=3 )
+        $pager = Pager::for_fixed_pagesize($this->_request, 10, 'query', 'page');
+        // fetching the total count of rows in the database table
+        $cnt_row = DB::select(DB::expr('count(*) as cnt'))->from('items')
+            ->exec()->get_single_row();
+        // setting the total count for the pager object
+        $pager->total_count($cnt_row['cnt']);
+
+        // creating the query
+        $query = DB::select()->from('items')
+            // setting the offset - limit values based on the page and pagesize values
+            // which can be read from the $pager object
+            ->offset(($pager->get_page() - 1) * $pager->get_pagesize())
+            ->limit($pager->get_pagesize());
+
+        // setting the template variables
+        // $items will be an iterable collection in the template
+        $this->_content->items = $query->exec();
+        // $pager will be the HTML code of the pager
+        $this->_content->pager = $pager->render();
+    }
+
+}
+@endcode
+
+Explanation of what is going on here:
+<ul>
+    <li>line 11: we add a CSS stylesheet to the output (see @c cyclone\request\BaseController for
+        more details). It is an in-built stylesheet of the pager library which is not supposed to
+        be used in production but serves as a good starting point to implement your own pagination
+        stylesheet.</li>
+    <li>In line 15 we instantiate the <code>Pager</code> object using the
+        @c cyclone\pager\Pager::for_fixed_pagesize() static factory methods. The parameter semantics
+        are the followings: the current page number is extracted from the query string of the request
+        of the current controller instance, the key in the query string will be <code>'page'</code>.
+        The page size will be 10, meaning that the pager will assume that on one page we will render
+        10 items of our collection. If you want to make the pagesize parametrizable then probably
+        you will instantiate the pager object using @c cyclone\pager\Pager::for_request() .</li>
+    <li>In line 17-18 we read the total number of items. This example uses the DB library of
+        CyclonePHP to fetch the count, but any other libraries or methods can be used (ORM solutions
+        or other database handling layers), the pager library does not depend on the data source of
+        the paginated collection. </li>
+    <li>In line 20 we pass the previously fetched count to the pager. This setter method MUST be called
+        before rendering the pager, since the total number of items is required to calculate
+        the total number of pages.</li>
+    <li>In line 23 - 27 the example fetches the fragment of the collection to be rendered. The
+        current page number can be accessed using @c cyclone\pager\Pager::get_page() and the current
+        page size can be accessed using @c cyclone\pager\Pager::get_pagesize() . The latter method call
+        can be very useful for pagers with variable-length pagesize, in this case it will always
+        return 10, since we created a fixed pagesize pager.</li>
+    <li>In line 31 we pass the items to be rendered on the current page to the HTML template. It
+        has nothing to do with the pager library since the library is responsible only for rendering
+        the pager itself and not the paginated collection.</li>
+    <li>In line 33 we pass the generated HTML code as a string to the template. All the calculations
+        inside the pager library wil be performed at this call.</li>
+</ul>
+
+@section pager-customization Customization
+
+<p>The pager template can be customized in several ways. The default template file is
+ <code>pager/pager</code> so by taking the advantage of the cascading file system you can
+ create a template in your <code>&ltapp-root&gt/views/pager/pager.php</code>. To
+ look up the template variables which can be used read the according API docs:
+ @c cyclone\pager\PagerCore::get:view() . The default template is a good starting point, you
+ can copy its contents to start customizing it.</p>
+
+<p>A better way of customization is to create your template for example in
+<code>&lt;app-root&gt;/views/mypager.php</code> then set it in your configuration
+as the default template. If you haven't changed the configuration reader setup in your
+<code>&lt;app-root&gt;/config/setup.php</code> then you can override this setting by putting
+the following contents to the <code>&lt;app-root&gt;/config/pager.php</code>:
+@code <?php
+
+return array(
+    'template' => 'mypager',
+); @endcode
+</p>
+
+<p>If you want to set a custom template for not all of the pagers in your application but only
+for a single pager instance then you can override the configuration setting using
+@c cyclone\pager\Pager::template() . Example:
+@code $pager = Pager::for_fixed_pagesize($this->_request, 10, 'query', 'page');
+$pager->template('mypager'); @endcode </p>

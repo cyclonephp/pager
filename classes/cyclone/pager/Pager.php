@@ -171,6 +171,17 @@ class Pager implements ParamSource, URLProvider{
         return $this->_pagesize_value;
     }
 
+    /**
+     * Sets the template file name to be used for rendering the pager.
+     *
+     * @param $template string
+     * @return Pager
+     */
+    public function template($template) {
+        $this->_pager_core->template($template);
+        return $this;
+    }
+
     public function get_url($page_num) {
         $query = $this->_request->query;
 
