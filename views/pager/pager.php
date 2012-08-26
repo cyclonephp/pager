@@ -1,10 +1,10 @@
 <ul class="pager">
-    <? if ($first_page_num !== FALSE) : ?>
-        <li><a href="<?= $first_page_num ?>">First</a></li>
+    <? if ($first_page_url !== FALSE) : ?>
+        <li><a href="<?= $first_page_url ?>">First</a></li>
     <? endif; ?>
 
-    <? if ($prev_page_num !== FALSE) : ?>
-        <li><a href="<?= $prev_page_num ?>">Previous</a></li>
+    <? if ($prev_page_url !== FALSE) : ?>
+        <li><a href="<?= $prev_page_url ?>">Previous</a></li>
     <? endif; ?>
 
     <? foreach ($before_links as $page_num => $url) : ?>
@@ -17,12 +17,12 @@
         <li><a href="<?= $url ?>"><?= $page_num ?></a></li>
     <? endforeach; ?>
 
-    <? if ($next_page_num !== FALSE) : ?>
-    <li><a href="<?= $next_page_num ?>">Next</a></li>
+    <? if ($next_page_url !== FALSE) : ?>
+    <li><a href="<?= $next_page_url ?>">Next</a></li>
     <? endif; ?>
 
-    <? if ($last_page_num !== FALSE) : ?>
-    <li><a href="<?= $last_page_num ?>">Last</a></li>
+    <? if ($last_page_url !== FALSE) : ?>
+    <li><a href="<?= $last_page_url ?>">Last</a></li>
     <? endif; ?>
 </ul>
 <div class="pager">

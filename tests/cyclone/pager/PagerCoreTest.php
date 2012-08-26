@@ -28,38 +28,38 @@ class PagerCoreTest extends \Kohana_Unittest_TestCase {
     public function test_first_last_prev_next_page_num() {
         $pager = self::create_pager(1, 10, 5);
         $view = $pager->get_view();
-        $this->assertFalse($view->first_page_num);
-        $this->assertFalse($view->prev_page_num);
-        $this->assertFalse($view->next_page_num);
-        $this->assertFalse($view->last_page_num);
+        $this->assertFalse($view->first_page_url);
+        $this->assertFalse($view->prev_page_url);
+        $this->assertFalse($view->next_page_url);
+        $this->assertFalse($view->last_page_url);
 
         $pager = self::create_pager(1, 10, 10);
         $view = $pager->get_view();
-        $this->assertFalse($view->first_page_num);
-        $this->assertFalse($view->prev_page_num);
-        $this->assertFalse($view->next_page_num);
-        $this->assertFalse($view->last_page_num);
+        $this->assertFalse($view->first_page_url);
+        $this->assertFalse($view->prev_page_url);
+        $this->assertFalse($view->next_page_url);
+        $this->assertFalse($view->last_page_url);
 
         $pager = self::create_pager(1, 10, 11);
         $view = $pager->get_view();
-        $this->assertFalse($view->first_page_num);
-        $this->assertFalse($view->prev_page_num);
-        $this->assertEquals('url/2', $view->next_page_num);
-        $this->assertEquals('url/2', $view->last_page_num);
+        $this->assertFalse($view->first_page_url);
+        $this->assertFalse($view->prev_page_url);
+        $this->assertEquals('url/2', $view->next_page_url);
+        $this->assertEquals('url/2', $view->last_page_url);
 
         $pager = self::create_pager(2, 10, 11);
         $view = $pager->get_view();
-        $this->assertEquals('url/1', $view->first_page_num);
-        $this->assertEquals('url/1', $view->prev_page_num);
-        $this->assertFalse($view->next_page_num);
-        $this->assertFalse($view->last_page_num);
+        $this->assertEquals('url/1', $view->first_page_url);
+        $this->assertEquals('url/1', $view->prev_page_url);
+        $this->assertFalse($view->next_page_url);
+        $this->assertFalse($view->last_page_url);
 
         $pager = self::create_pager(3, 10, 41);
         $view = $pager->get_view();
-        $this->assertEquals('url/1', $view->first_page_num);
-        $this->assertEquals('url/2', $view->prev_page_num);
-        $this->assertEquals('url/4', $view->next_page_num);
-        $this->assertEquals('url/5', $view->last_page_num);
+        $this->assertEquals('url/1', $view->first_page_url);
+        $this->assertEquals('url/2', $view->prev_page_url);
+        $this->assertEquals('url/4', $view->next_page_url);
+        $this->assertEquals('url/5', $view->last_page_url);
     }
 
     public function test_offset() {
