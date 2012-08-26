@@ -89,7 +89,7 @@ class PagerCore {
 
     private function add_static_pagenums(AbstractView $view, $current_page, $page_count) {
         $url_provider = $this->_url_provider;
-        if ($current_page === 1) {
+        if ($current_page == 1) {
             $view->first_page_num = FALSE;
             $view->prev_page_num = FALSE;
         } else {
@@ -97,7 +97,7 @@ class PagerCore {
             $view->prev_page_num = $url_provider->get_url($current_page - 1);
         }
 
-        if ($current_page === $page_count) {
+        if ($current_page == $page_count) {
             $view->next_page_num = FALSE;
             $view->last_page_num = FALSE;
         } else {
@@ -145,7 +145,7 @@ class PagerCore {
         if ($current_page < 1)
             throw new Exception("invalid value returned by ParamSource::get_page(): '$current_page'");
 
-        if ($this->_auto_hide && $current_page === 1) {
+        if ($this->_auto_hide && $this->_total_count === 1) {
             return NULL;
         }
 
@@ -161,7 +161,9 @@ class PagerCore {
         $view = AbstractView::factory($this->_template, array(
             'page_count' => $page_count,
             'first_item_offset' => $first_item_offset,
-            'last_item_offset' => $last_item_offset
+            'last_item_offset' => $last_item_offset,
+            'total_count' => $this->_total_count,
+            'current_page' => $current_page
         ));
         $this->add_static_pagenums($view, $current_page, $page_count);
         $this->add_iterators($view, $current_page, $page_count);
@@ -173,7 +175,7 @@ class PagerCore {
      */
     public function render() {
         $view = $this->get_view();
-        if ($view === NULL) 
+        if ($view === NULL)
             return '';
 
         return $view->render();
