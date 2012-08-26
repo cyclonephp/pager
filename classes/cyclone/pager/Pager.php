@@ -146,6 +146,15 @@ class Pager implements ParamSource, URLProvider{
     }
 
     /**
+     * @param $total_count
+     * @return Pager
+     */
+    public function total_count($total_count) {
+        $this->_pager_core->total_count($total_count);
+        return $this;
+    }
+
+    /**
      * @param bool $relative_url
      * @return Pager
      */
@@ -165,7 +174,7 @@ class Pager implements ParamSource, URLProvider{
     public function get_url($page_num) {
         $query = $this->_request->query;
 
-        $params = $this->_request->params;
+        $params = $this->_request->params === NULL ? array() : $this->_request->params;
 
         if ($this->_page_src === 'params') {
             $params[$this->_page_key] = $page_num;
@@ -184,7 +193,15 @@ class Pager implements ParamSource, URLProvider{
         if ($this->_request->route === NULL) {
             return $base_url . $query_string;
         }
-        return $base_url . $this->_request->route->uri($params->getArrayCopy()) . $query_string;
+        return $base_url . $this->_request->route->uri($params) . $query_string;
+    }
+
+    public function get_view() {
+        return $this->_pager_core->render();
+    }
+
+    public function render() {
+        return $this->_pager_core->render();
     }
 
 }
