@@ -1,0 +1,26 @@
+ul.pager {
+   margin-left: -30px;
+}
+
+ul.pager li {
+    display: inline;
+    list-style-type: none;
+}
+
+ul.pager li a {
+    border: 1px solid blue;
+    padding: 2px 3px 2px 3px;
+    background-color: #deebff;
+    text-decoration: none;
+    font-family: sans-serif;
+}
+
+ul.pager li a:visited {
+    color: blue
+}
+
+div.pager {
+    font-size: 80%;
+    color: #a9a9a9;
+    font-family: sans-serif;
+}
