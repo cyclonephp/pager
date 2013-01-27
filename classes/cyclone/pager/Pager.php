@@ -167,8 +167,23 @@ class Pager implements ParamSource, URLProvider{
         return $this->_page_value;
     }
 
+    /**
+     * Returns the maximum page size (the maximum number of entries on a page).
+     *
+     * @return int
+     */
     public function get_pagesize() {
         return $this->_pagesize_value;
+    }
+
+    /**
+     * Returns the number of items on the current page. If the current page is the last page then this value
+     * will probably not the same as @c get_pagesize() .
+     *
+     * @return int
+     */
+    public function get_current_pagesize() {
+        return $this->_pager_core->get_current_pagesize();
     }
 
     /**

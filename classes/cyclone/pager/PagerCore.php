@@ -170,6 +170,21 @@ class PagerCore {
         $view->after_links = new LinkIterator($after_from, $after_to, $this->_url_provider);
     }
 
+    public function get_current_pagesize() {
+        $current_page = $this->_param_source->get_page();
+        $page_count = $this->get_page_count();
+        $pagesize = $this->_param_source->get_pagesize();
+        if ($current_page < $page_count) {
+            return $pagesize;
+        } else {
+            return $this->_total_count % $pagesize;
+        }
+    }
+
+    private function get_page_count() {
+        return (int) ceil($this->_total_count / $this->_param_source->get_pagesize());
+    }
+
     /**
      * <p>Creates and returns the view object for the pager.</p>
      *
@@ -229,7 +244,7 @@ class PagerCore {
             throw new Exception("invalid value returned by ParamSource::get_page(): '$current_page'");
 
         $page_size = $this->_param_source->get_pagesize();
-        $page_count = (int) ceil($this->_total_count / $page_size);
+        $page_count = $this->get_page_count();
 
         if ($this->_auto_hide && $page_count === 1) {
             return NULL;

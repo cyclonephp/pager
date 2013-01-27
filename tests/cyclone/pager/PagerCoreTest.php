@@ -220,4 +220,13 @@ class PagerCoreTest extends \Kohana_Unittest_TestCase {
         $this->assertEquals('', $pager->render());
     }
 
+    public function test_get_current_pagesize() {
+        $pager = self::create_pager(1, 10, 20);
+        $this->assertEquals(10, $pager->get_current_pagesize());
+        $pager = self::create_pager(2, 10, 15);
+        $this->assertEquals(5, $pager->get_current_pagesize());
+        $pager = self::create_pager(1, 10, 5);
+        $this->assertEquals(5, $pager->get_current_pagesize());
+    }
+
 }
