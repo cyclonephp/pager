@@ -66,7 +66,7 @@ class PagerCore {
      * <p>Sets the total number of items to be paginated.</p>
      *
      * <p>This method MUST be set before rendering otherwise @c get_view() will throw an
-     * @c Exception .</p>
+     * @c CycloneException .</p>
      *
      * @param $total_count int
      * @return PagerCore this
